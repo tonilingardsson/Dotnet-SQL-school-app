@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -23,4 +24,5 @@ public partial class Staff
 
     // Navigation property to Role entity (which is not set on the database side)
     public virtual Role RoleName { get; set; } = null!;
+
 }
