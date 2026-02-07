@@ -14,9 +14,9 @@ namespace Skola_ER_Application
             {
                 Console.WriteLine("Please, choose one of the actions below");
                 Console.WriteLine("1. Show all students");
-                Console.WriteLine("1. Show students in a class");
-                Console.WriteLine("1. Add new staff");
-                Console.WriteLine("1. Show staff with a new role");
+                Console.WriteLine("2. Show students in a class");
+                Console.WriteLine("3. Add new staff");
+                Console.WriteLine("4. Show staff with a new role");
                 Console.WriteLine("5. Exit");
                 Console.WriteLine("Choice: ");
                 var choice = Console.ReadLine();
