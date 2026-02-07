@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Skola_ER_Application.Models;
-using System;
-using System.Threading.Channels;
 
 namespace Skola_ER_Application
 {
@@ -9,6 +7,43 @@ namespace Skola_ER_Application
     {
         private static void Main(string[] args)
         {
+
+            using var context = new ErSkolaContext();
+
+            while (true)
+            {
+                Console.WriteLine("Please, choose one of the actions below");
+                Console.WriteLine("1. Show all students");
+                Console.WriteLine("1. Show students in a class");
+                Console.WriteLine("1. Add new staff");
+                Console.WriteLine("1. Show staff with a new role");
+                Console.WriteLine("5. Exit");
+                Console.WriteLine("Choice: ");
+                var choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        ShowAllStudents(context);
+                        break;
+                    case "2":
+                        ShowStudentsInClass(context);
+                        break;
+                    case "3":
+                        AddNewStaff(context);
+                        break;
+                    case "4":
+                        ShowStaffWithRole(context);
+                        break;
+                    case "5":
+                        return;
+                    default:
+                        Console.WriteLine("You must type a number 1-5");
+                        break;
+                }
+
+            }
+        }
 
             /*using (var context = new ErSkolaContext())
             {
@@ -85,8 +120,8 @@ namespace Skola_ER_Application
             }*/
 
             // Delete data/objects
-            using (var context = new ErSkolaContext())
-            {
+            // using (var context = new ErSkolaContext())
+            
                 /*var studentToDelete = context.Students.FirstOrDefault(s => s.StudentFirstName == "Bruce");
 
                 if (studentToDelete != null)
@@ -115,11 +150,11 @@ namespace Skola_ER_Application
                     Console.WriteLine("Student not found. It has been erased!");
                 }*/
 
-                
-            }
+
+            
 
             // Add serveral students to the database
-            using (var context = new ErSkolaContext())
+            /*using (var context = new ErSkolaContext())
             {
                 var studentsToAdd = new List<Student>
                 {
@@ -148,9 +183,9 @@ namespace Skola_ER_Application
                 context.Students.AddRange(studentsToAdd);
                 context.SaveChanges();
                 Console.WriteLine("Several students added!");
-            }
+            }*/
 
-            using (var context = new ErSkolaContext()) 
+            /*using (var context = new ErSkolaContext()) 
             {
                 // Fetch students with related data (include)
                 var studentsWithSubjects = context.Students
@@ -169,7 +204,7 @@ namespace Skola_ER_Application
                         }
                     }
                 }
-            }
+            }*/
 
             /*      // Build main menu
                   while (userIsLoggedIn)
@@ -205,7 +240,7 @@ namespace Skola_ER_Application
                   }
               }
           }
-
+*/
           private static void ShowAllStudents(ErSkolaContext context)
           {
               Console.WriteLine("Sort by: 1 = First name, 2 = Last name");
@@ -238,9 +273,7 @@ namespace Skola_ER_Application
               var students = query.ToList();
 
               foreach (var s in students)
-              {
                   Console.WriteLine($"{s.StudentFirstName} {s.StudentLastName}");
-              }
           }
 
           private static void ShowStudentsInClass(ErSkolaContext context)
@@ -340,15 +373,15 @@ namespace Skola_ER_Application
           private static void ShowStaffWithRole(ErSkolaContext context)
           {
               var staffList = context.Staff.
-                  Include(s => s.RoleId)
+                  Include(s => s.Role)
                   .ToList();
 
               foreach (var staff in staffList)
               {
-                  Console.WriteLine($"{staff.StaffFirstName} {staff.StaffLastName} - {staff.Roles.RoleName}");
+                  Console.WriteLine($"{staff.StaffFirstName} {staff.StaffLastName} - {staff.Role.RoleName}");
               }
-          }*/
-            Console.ReadKey();
+          
+           // Console.ReadKey();
         }
     }
 }

@@ -23,6 +23,6 @@ public partial class Staff
     public virtual ICollection<Grade> Grades { get; set; } = new List<Grade>();
 
     // Navigation property to Role entity (which is not set on the database side)
-    public virtual Role RoleName { get; set; } = null!;
+    public virtual Role Role { get; set; } = null!;
 
 }

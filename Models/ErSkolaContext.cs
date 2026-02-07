@@ -96,7 +96,7 @@ public partial class ErSkolaContext : DbContext
             entity.Property(e => e.StaffLastName).HasMaxLength(50);
             entity.Property(e => e.StaffPersonalNo).HasMaxLength(12);
 
-            entity.HasOne(d => d.RoleName).WithMany(p => p.Staff)
+            entity.HasOne(d => d.Role).WithMany(p => p.Staff)
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Staff_Roles");
