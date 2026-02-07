@@ -58,7 +58,7 @@ namespace Skola_ER_Application
 
               if (byFirst && ascending)
               {
-                  query = query.OrderByDescending(s => s.StudentFirstName);
+                  query = query.OrderBy(s => s.StudentFirstName);
               }
               else if (byFirst && !ascending)
               {
