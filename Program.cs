@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Skola_ER_Application.Models;
+using System;
 
 namespace Skola_ER_Application
 {
@@ -8,15 +9,15 @@ namespace Skola_ER_Application
         private static void Main(string[] args)
         {
 
-            using var context = new ErSkolaContext();
-
             while (true)
             {
+                using var context = new ErSkolaContext();
+
                 Console.WriteLine("Please, choose one of the actions below");
                 Console.WriteLine("1. Show all students");
                 Console.WriteLine("2. Show students in a class");
                 Console.WriteLine("3. Add new staff");
-                Console.WriteLine("4. Show staff with a new role");
+                Console.WriteLine("4. Show staff with their role");
                 Console.WriteLine("5. Exit");
                 Console.WriteLine("Choice: ");
                 var choice = Console.ReadLine();
@@ -41,207 +42,9 @@ namespace Skola_ER_Application
                         Console.WriteLine("You must type a number 1-5");
                         break;
                 }
-
             }
         }
-
-            /*using (var context = new ErSkolaContext())
-            {
-                // Show all students
-                var allStudents = context.Students.ToList();
-
-                foreach (var student in allStudents)
-                {
-                    Console.WriteLine($"{student.StudentFirstName} {student.StudentLastName} - {student.StudentPersonalNo}");
-                }
-
-                // Show a specific student                var studentToFind = context.Students.FirstOrDefault(student => student.StudentId == 1);
-
-                if (studentToFind != null)
-                {
-                    Console.WriteLine($"Found student: {studentToFind.StudentFirstName} {studentToFind.StudentLastName} - {studentToFind.StudentPersonalNo}");
-                }
-                else
-                {
-                    Console.WriteLine("Student not found.");
-                }
-            }*/
-
-            /*using (var context = new ErSkolaContext())
-            {
-                // Create a new student
-                var newStudent = new Student
-                {
-                    StudentFirstName = "Bat",
-                    StudentLastName = "Man",
-                    StudentPersonalNo = "198502022345",
-                    ClassId = 1
-                };
-
-                *//*    // Save it on the database
-                    context.Students.Add(newStudent);
-                    context.SaveChanges();
-                    Console.WriteLine("New student added.");*//*
-
-                // Let's see if it can be read from the database
-                var studentToFind = context.Students.FirstOrDefault(student => student.StudentFirstName == "Bat");
-
-                if (studentToFind != null) 
-                {
-                    Console.WriteLine($"{studentToFind.StudentId}: {studentToFind.StudentFirstName} {studentToFind.StudentLastName}");
-                }
-                else
-                {
-                    Console.WriteLine("Student not found.");
-                }
-            }*/
-
-            /*// Update data/objects
-            using (var context = new ErSkolaContext())
-            {
-                var studentToUpdate = context.Students.FirstOrDefault(s => s.StudentFirstName == "Bat");
-
-                if (studentToUpdate != null)
-                {
-                    studentToUpdate.StudentFirstName = "Bruce";
-                    studentToUpdate.StudentLastName = "Wayne";
-                    studentToUpdate.StudentPersonalNo = "198502022345";
-                    studentToUpdate.ClassId = 1;
-                    // studentToUpdate.DateOfBirth = "1985-02-02"; wrong date format
-                    studentToUpdate.Gender = "Man";
-                    context.SaveChanges();
-                    Console.WriteLine($"Student {studentToUpdate.StudentFirstName} updated!");
-
-                }
-                else
-                {
-                    Console.WriteLine("Student not found.");
-                }
-            }*/
-
-            // Delete data/objects
-            // using (var context = new ErSkolaContext())
-            
-                /*var studentToDelete = context.Students.FirstOrDefault(s => s.StudentFirstName == "Bruce");
-
-                if (studentToDelete != null)
-                {
-                    studentToDelete.StudentFirstName = "Bruce";
-                    studentToDelete.StudentLastName = "Wayne";
-                    studentToDelete.StudentPersonalNo = "198502022345";
-                    studentToDelete.ClassId = 1;
-                    context.SaveChanges();
-                    Console.WriteLine($"Student {studentToDelete.StudentFirstName} deleted!");
-                }
-                else
-                {
-                    Console.WriteLine("Student not found.");
-                }
-
-                // Let's see if it can still be read from the database. It should be erased now.
-                var studentToFind = context.Students.FirstOrDefault(student => student.StudentFirstName == "Bat");
-
-                if (studentToFind != null)
-                {
-                    Console.WriteLine($"{studentToFind.StudentId}: {studentToFind.StudentFirstName} {studentToFind.StudentLastName}");
-                }
-                else
-                {
-                    Console.WriteLine("Student not found. It has been erased!");
-                }*/
-
-
-            
-
-            // Add serveral students to the database
-            /*using (var context = new ErSkolaContext())
-            {
-                var studentsToAdd = new List<Student>
-                {
-                    new Student
-                    {
-                        StudentFirstName = "Clark",
-                        StudentLastName = "Kent",
-                        StudentPersonalNo = "198503022345",
-                        ClassId = 1
-                    },
-                    new Student
-                    {
-                        StudentFirstName = "Diana",
-                        StudentLastName = "Prince",
-                        StudentPersonalNo = "198504022345",
-                        ClassId = 1
-                    },
-                    new Student
-                    {
-                        StudentFirstName = "Barry",
-                        StudentLastName = "Allen",
-                        StudentPersonalNo = "198505022345",
-                        ClassId = 1
-                    }
-                };
-                context.Students.AddRange(studentsToAdd);
-                context.SaveChanges();
-                Console.WriteLine("Several students added!");
-            }*/
-
-            /*using (var context = new ErSkolaContext()) 
-            {
-                // Fetch students with related data (include)
-                var studentsWithSubjects = context.Students
-                    .Include(student => student.Subject)
-                    .ThenInclude(student => student.Grades)
-                    .ToList();
-
-                foreach (var student in studentsWithSubjects) 
-                {
-                    Console.WriteLine($"{student.StudentFirstName} {student.StudentLastName} - Subject: {student.Subject?.SubjectName}");
-                    if (student.Subject != null) 
-                    {
-                        foreach (var grade in student.Subject.Grades) 
-                        {
-                            Console.WriteLine($"  Grade: {grade.GradeValue}");
-                        }
-                    }
-                }
-            }*/
-
-            /*      // Build main menu
-                  while (userIsLoggedIn)
-              {
-
-                  Console.WriteLine("1. Show all students");
-                  Console.WriteLine("2. Show students in a class");
-                  Console.WriteLine("3. Add new staff");
-                  Console.WriteLine("4. Show staff with a role");
-                  Console.WriteLine("5. Exit");
-                  Console.Write("Choice: ");
-                  var choice = Console.ReadLine();
-
-                  switch(choice)
-                  {
-                      case "1":
-                          ShowAllStudents(context);
-                          break;
-                      case "2":
-                          ShowStudentsInClass(context);
-                          break;
-                      case "3":
-                          AddNewStaff(context);
-                          break;
-                      case "4":
-                          ShowStaffWithRole(context);
-                          break;
-                      case "5":
-                          return;
-                      default:
-                          Console.WriteLine("You must type a number 1-5");
-                          break;
-                  }
-              }
-          }
-*/
-          private static void ShowAllStudents(ErSkolaContext context)
+                      private static void ShowAllStudents(ErSkolaContext context)
           {
               Console.WriteLine("Sort by: 1 = First name, 2 = Last name");
               var sortField = Console.ReadLine();
