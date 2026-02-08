@@ -1,5 +1,6 @@
 ﻿using Skola_ER_Application.Models;
 using Skola_ER_Application.Services;
+using System;
 
 namespace Skola_ER_Application
 {
@@ -15,7 +16,7 @@ namespace Skola_ER_Application
                 Console.WriteLine("2. Show students in a class");
                 Console.WriteLine("3. Add new staff");
                 Console.WriteLine("4. Show staff with a role");
-                Console.WriteLine("0. Exit");
+                Console.WriteLine("5. Exit");
                 Console.Write("Choice: ");
                 var choice = Console.ReadLine();
 
@@ -33,10 +34,10 @@ namespace Skola_ER_Application
                     case "4":
                         StaffService.ShowStaffWithRole(context);
                         break;
-                    case "0":
+                    case "5":
                         return;
                     default:
-                        Console.WriteLine("You must type a number 0–4");
+                        Console.WriteLine("You must type a number 1–5");
                         break;
                 }
             }
