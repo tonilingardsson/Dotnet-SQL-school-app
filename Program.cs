@@ -16,7 +16,9 @@ namespace Skola_ER_Application
                 Console.WriteLine("2. Show students in a class");
                 Console.WriteLine("3. Add new staff");
                 Console.WriteLine("4. Show staff with a role");
-                Console.WriteLine("5. Exit");
+               Console.WriteLine("5. Show teachers amount per department");
+
+                Console.WriteLine("6. Exit");
                 Console.Write("Choice: ");
                 var choice = Console.ReadLine();
 
@@ -35,6 +37,9 @@ namespace Skola_ER_Application
                         StaffService.ShowStaffWithRole(context);
                         break;
                     case "5":
+                        StaffService.ShowTeacherCountPerDepartment(context);
+                        break;
+                    case "6":
                         return;
                     default:
                         Console.WriteLine("You must type a number 1–5");

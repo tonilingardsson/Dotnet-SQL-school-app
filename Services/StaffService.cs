@@ -1,5 +1,6 @@
 ﻿using Skola_ER_Application.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Channels;
 
 namespace Skola_ER_Application.Services;
 
@@ -13,7 +14,10 @@ public static class StaffService
         var lastName = Console.ReadLine()?.Trim();
         Console.Write("Personal number: ");
         var personalNo = Console.ReadLine()?.Trim();
+        Console.WriteLine("Contract start date: ");
+        var contractStartDate = Console.ReadLine()?.Trim();
 
+        // Asking later on the admin to enter an the role (an int), we have to convert it from string to int
         var roles = context.Roles.ToList();
         Console.WriteLine("Available roles: ");
         foreach (var r in roles)
@@ -31,6 +35,7 @@ public static class StaffService
             StaffFirstName = firstName ?? "",
             StaffLastName = lastName ?? "",
             StaffPersonalNo = personalNo ?? "",
+            ContractStartDate = string.IsNullOrWhiteSpace(contractStartDate) ? null : DateOnly.Parse(contractStartDate),
             RoleId = roleId
         };
 
@@ -47,6 +52,21 @@ public static class StaffService
             .ToList();
 
         foreach (var staff in staffList)
-            Console.WriteLine($"{staff.StaffFirstName} {staff.StaffLastName} - {staff.Role.RoleName}");
+            Console.WriteLine($"{staff.StaffFirstName} {staff.StaffLastName} - {staff.Role.RoleName} since {staff.ContractStartDate}");
+    }
+
+    public static void ShowTeacherCountPerDepartment(ErSkolaContext context)
+    {
+        var query = context.Staff
+            .Where(s => s.Role.RoleName == "Teacher")
+            .GroupBy(s => s.Department)
+            .Select(g => new { Department = g.Key, TeacherCount = g.Count() })
+            .ToList();
+
+        // Let's count how many teachers
+        foreach (var assignation in query)
+        {
+            Console.WriteLine($"{assignation.Department}: {assignation.TeacherCount} teachers");
+        }
     }
 }
