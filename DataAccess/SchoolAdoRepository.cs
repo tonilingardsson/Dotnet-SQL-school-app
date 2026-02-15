@@ -93,6 +93,32 @@ ORDER BY subj.SubjectName, g.GradeDate;";
             }
         }
         // - ShowAverageSalaryPerDepartment
+        public void ShowAverageSalaryPerDepartment()
+        {
+            const string sql = @"
+                SELECT d.DepartmentName,
+                AVG(s.Salary) AS AverageSalary
+            FROM Staff s
+            JOIN Departments d ON s.DepartmentId = d.DepartmentId
+            GROUP BY d.DepartmentName;";
+
+            using var conn = CreateConnection();
+            using var cmd = new SqlCommand(sql, conn);
+
+            conn.Open();
+            using var reader = cmd.ExecuteReader();
+            if (!reader.HasRows)
+            {
+                Console.WriteLine("No salary data found.");
+                return;
+            }
+
+            while (reader.Read())
+            {
+                Console.WriteLine(
+                    $"{reader["DepartmentName"]}: average {reader["AverageSalary"]} SEK/month");
+            }
+        }
         // - ShowStudentInfoById (SP)
         // - SetGradeWithTransaction
     }
