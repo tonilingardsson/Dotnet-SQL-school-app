@@ -143,5 +143,37 @@ ORDER BY subj.SubjectName, g.GradeDate;";
             }
         }
         // - SetGradeWithTransaction
+        public void SetGradeWithTransaction(int studentId, int subjectId, int teacherId, string gradeValue, DateTime gradeDate)
+        {
+            using var conn = CreateConnection();
+            conn.Open();
+            using var transaction = conn.BeginTransaction();
+
+            try
+            {
+                const string sql = @"
+INSERT INTO Grades (StudentId, SubjectId, TeacherId, GradeValue, GradeDate)
+VALUES (@StudentId, @SubjectId, @TeacherId, @GradeValue, @GradeDate);";
+
+                using var cmd = new SqlCommand(sql, conn, transaction);
+                cmd.Parameters.AddWithValue("@StudentId", studentId);
+                cmd.Parameters.AddWithValue("@SubjectId", subjectId);
+                cmd.Parameters.AddWithValue("@TeacherId", teacherId);
+                cmd.Parameters.AddWithValue("@GradeValue", gradeValue);
+                cmd.Parameters.AddWithValue("@GradeDate", gradeDate);
+
+                cmd.ExecuteNonQuery();
+
+                // any additional checks could go here; if something fails, trow an exection
+
+                transaction.Commit();
+                Console.WriteLine("Grade saved.");
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                Console.WriteLine("Error while saving grade: " + ex.Message);
+            }
+        }
     }
 }

@@ -65,6 +65,22 @@ namespace Skola_ER_Application
                         // break;
                     case "9":
                         // TODO after SetGradeWithTransaction exists
+                        Console.WriteLine("Student ID: ");
+                        int.TryParse(Console.ReadLine(), out var sId);
+                        Console.WriteLine("Subject ID: ");
+                        int.TryParse(Console.ReadLine(), out var subjId);
+                        Console.WriteLine("Teacher ID: ");
+                        int.TryParse(Console.ReadLine(), out var tId);
+                        Console.Write("Grade (A-F): ");
+                        var grade = Console.ReadLine();
+                        Console.WriteLine("Grade date (YYYY-MM-DD): ");
+                        var dateText = Console.ReadLine();
+                        if (!DateTime.TryParse(dateText, out var gDate))
+                        {
+                            Console.WriteLine("Invalid date.");
+                            break;
+                        }
+                        adoRepo.SetGradeWithTransaction(sId, subjId, tId, grade ?? "", gDate);
                         break;
                     case "0":
                         return;
