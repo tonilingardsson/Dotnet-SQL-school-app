@@ -10,16 +10,19 @@ public static class StaffService
     {
         Console.Write("First name: ");
         var firstName = Console.ReadLine()?.Trim();
+
         Console.Write("Last name: ");
         var lastName = Console.ReadLine()?.Trim();
+
         Console.Write("Personal number: ");
         var personalNo = Console.ReadLine()?.Trim();
-        Console.WriteLine("Contract start date: ");
+
+        Console.Write("Contract start date (YYYY-MM-DD): ");
         var contractStartDate = Console.ReadLine()?.Trim();
 
-        // Asking later on the admin to enter an the role (an int), we have to convert it from string to int
+        // Choose role
         var roles = context.Roles.ToList();
-        Console.WriteLine("Available roles: ");
+        Console.WriteLine("Available roles:");
         foreach (var r in roles)
             Console.WriteLine($"{r.RoleId}: {r.RoleName}");
 
@@ -30,13 +33,29 @@ public static class StaffService
             return;
         }
 
+        // Choose department
+        var departments = context.Departments.ToList();
+        Console.WriteLine("Available departments:");
+        foreach (var d in departments)
+            Console.WriteLine($"{d.DepartmentId}: {d.DepartmentName}");
+
+        Console.Write("Choose department ID: ");
+        if (!int.TryParse(Console.ReadLine(), out int departmentId))
+        {
+            Console.WriteLine("Invalid department!");
+            return;
+        }
+
         var staff = new Staff
         {
             StaffFirstName = firstName ?? "",
             StaffLastName = lastName ?? "",
             StaffPersonalNo = personalNo ?? "",
-            ContractStartDate = string.IsNullOrWhiteSpace(contractStartDate) ? null : DateOnly.Parse(contractStartDate),
-            RoleId = roleId
+            ContractStartDate = string.IsNullOrWhiteSpace(contractStartDate)
+                ? null
+                : DateOnly.Parse(contractStartDate),
+            RoleId = roleId,
+            DepartmentId = departmentId
         };
 
         context.Staff.Add(staff);
