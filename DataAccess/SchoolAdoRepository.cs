@@ -120,6 +120,28 @@ ORDER BY subj.SubjectName, g.GradeDate;";
             }
         }
         // - ShowStudentInfoById (SP)
+        public void ShowStudentInfoById(int studentId)
+        {
+            using var conn = CreateConnection();
+            using var cmd = new SqlCommand("dbo.sp_GetStudentInfo", conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+            conn.Open();
+            using var reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                Console.WriteLine(
+                    $"{reader["StudentId"]}: {reader["StudentFirstName"]} {reader["StudentLastName"]} " +
+                    $"- Class: {reader["ClassNAme"]}, PersonalNo: {reader["StudentPersonalNo"]}, Gender: {reader["Gender"]}"
+                    );
+            }
+            else {
+                Console.WriteLine("Student not found.");
+            }
+        }
         // - SetGradeWithTransaction
     }
 }
