@@ -24,6 +24,7 @@ namespace Skola_ER_Application.DataAccess
         }
 
         // - ShowStaffOverview
+        // - ShowGradesForStudent
         public void ShowGradesForStudent(int studentId)
         {
             const string sql = @"
@@ -64,8 +65,33 @@ ORDER BY subj.SubjectName, g.GradeDate;";
                     $"by {reader["TeacherFirstName"]} + {reader["TeacherLastName"]}");
             }
         }
-        // - ShowGradesForStudent
         // - ShowTotalSalaryPerDepartment
+        public void ShowTotalSalaryPerDepartment()
+        {
+            const string sql = @"
+                SELECT d.DepartmentName,
+                    SUM(s.Salary) AS TotalMonthlySalary
+                FROM Staff s
+                JOIN Departments d ON  s.DepartmentId = d.DepartmentId
+                GROUP BY d.DepartmentName;";
+
+            using var conn = CreateConnection();
+            using var cmd = new SqlCommand(sql, conn);
+
+            conn.Open();
+            using var reader = cmd.ExecuteReader();
+            if (!reader.HasRows)
+            {
+                Console.WriteLine("No salary data found.");
+                return;
+            }
+
+            while (reader.Read())
+            {
+                Console.WriteLine(
+                    $"{reader["DepartmentName"]}: {reader["TotalMonthlySalary"]} SEK/month");
+            }
+        }
         // - ShowAverageSalaryPerDepartment
         // - ShowStudentInfoById (SP)
         // - SetGradeWithTransaction
