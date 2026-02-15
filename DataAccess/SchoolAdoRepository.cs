@@ -24,6 +24,7 @@ namespace Skola_ER_Application.DataAccess
         }
 
         // - ShowStaffOverview
+      
         // - ShowGradesForStudent
         // - ShowTotalSalaryPerDepartment
         // - ShowAverageSalaryPerDepartment
