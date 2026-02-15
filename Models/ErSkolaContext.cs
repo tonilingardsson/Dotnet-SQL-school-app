@@ -17,6 +17,8 @@ public partial class ErSkolaContext : DbContext
 
     public virtual DbSet<Class> Classes { get; set; }
 
+    public virtual DbSet<Department> Departments { get; set; }
+
     public virtual DbSet<Grade> Grades { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
@@ -28,7 +30,7 @@ public partial class ErSkolaContext : DbContext
     public virtual DbSet<Subject> Subjects { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=.;Database=ER_Skola;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -43,6 +45,13 @@ public partial class ErSkolaContext : DbContext
                 .HasForeignKey(d => d.MentorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Classes_Mentor");
+        });
+
+        modelBuilder.Entity<Department>(entity =>
+        {
+            entity.HasKey(e => e.DepartmentId).HasName("PK__Departme__B2079BEDD350E696");
+
+            entity.Property(e => e.DepartmentName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Grade>(entity =>
@@ -88,6 +97,10 @@ public partial class ErSkolaContext : DbContext
             entity.Property(e => e.StaffFirstName).HasMaxLength(50);
             entity.Property(e => e.StaffLastName).HasMaxLength(50);
             entity.Property(e => e.StaffPersonalNo).HasMaxLength(12);
+
+            entity.HasOne(d => d.DepartmentNavigation).WithMany(p => p.Staff)
+                .HasForeignKey(d => d.DepartmentId)
+                .HasConstraintName("FK_Staff_Departments");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Staff)
                 .HasForeignKey(d => d.RoleId)

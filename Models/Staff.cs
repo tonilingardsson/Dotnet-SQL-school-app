@@ -21,7 +21,11 @@ public partial class Staff
 
     public DateOnly? ContractStartDate { get; set; }
 
+    public int? DepartmentId { get; set; }
+
     public virtual ICollection<Class> Classes { get; set; } = new List<Class>();
+
+    public virtual Department? DepartmentNavigation { get; set; }
 
     public virtual ICollection<Grade> Grades { get; set; } = new List<Grade>();
 
