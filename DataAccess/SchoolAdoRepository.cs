@@ -37,11 +37,11 @@ namespace Skola_ER_Application.DataAccess
                 t.StaffFirstName AS TeacherFirstName,
                 t.StaffLastName AS TeacherLastName
             FROM Grades AS g
-            JOIN Student AS s ON g.SubjectId = s.StudentId
+            JOIN Students AS s ON g.StudentId = s.StudentId
             JOIN Subjects AS subj ON g.SubjectId = subj.SubjectId
             JOIN Staff AS t ON g.TeacherId = t.StaffId
             WHERE s.StudentId = @StudentId
-ORDER BY subj.SubjectName, g.GradeDate;";
+            ORDER BY subj.SubjectName, g.GradeDate;";
 
             using var conn = CreateConnection();
             using var cmd = new SqlCommand(sql, conn);
@@ -59,10 +59,10 @@ ORDER BY subj.SubjectName, g.GradeDate;";
             {
                 var date = (DateTime)reader["GradeDate"];
                 Console.WriteLine(
-                    $"{reader["StudentFirstName"]} {reader["StudentLastName"]} - " +
-                    $"{reader["SubjectName"]} : {reader["GradeValue"]}" + 
+                    $"{reader["StudentFirstName"]} {reader["StudentLastName"]} got a " +
+                    $"{reader["GradeValue"]}on {reader["SubjectName"]} the " + 
                     $"({date:yyyy-MM-dd}) " +
-                    $"by {reader["TeacherFirstName"]} + {reader["TeacherLastName"]}");
+                    $"set by {reader["TeacherFirstName"]} {reader["TeacherLastName"]}.");
             }
         }
         // - ShowTotalSalaryPerDepartment
