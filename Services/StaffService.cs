@@ -1,6 +1,7 @@
 ﻿using Skola_ER_Application.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Channels;
+using System.Globalization;
 
 namespace Skola_ER_Application.Services;
 
@@ -17,8 +18,28 @@ public static class StaffService
         Console.Write("Personal number: ");
         var personalNo = Console.ReadLine()?.Trim();
 
-        Console.Write("Contract start date (YYYY-MM-DD): ");
-        var contractStartDate = Console.ReadLine()?.Trim();
+        Console.Write("Contract start date (YYYY-MM-DD or YYYYMMDD): ");
+        var contractStartDateInput = Console.ReadLine()?.Trim();
+
+        DateOnly? contractStartDate = null;
+
+        if (!string.IsNullOrWhiteSpace(contractStartDateInput))
+        {
+            string[] allowedFormats = { "yyyy-MM-dd", "yyyyMMdd" };
+
+            if (!DateOnly.TryParseExact(
+                contractStartDateInput,
+                allowedFormats,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var parsedDate))
+            { 
+
+        Console.WriteLine("Invalid date format! Please use YYYY-MM-DD or YYYYMMDD.");
+        return;
+    }
+    contractStartDate = parsedDate;
+        }
 
         using (var context = new ErSkolaContext())
         {
@@ -54,9 +75,7 @@ public static class StaffService
                 StaffFirstName = firstName ?? "",
                 StaffLastName = lastName ?? "",
                 StaffPersonalNo = personalNo ?? "",
-                ContractStartDate = string.IsNullOrWhiteSpace(contractStartDate)
-                    ? null
-                    : DateOnly.Parse(contractStartDate),
+                ContractStartDate = contractStartDate,
                 RoleId = roleId,
                 DepartmentId = departmentId
             };
