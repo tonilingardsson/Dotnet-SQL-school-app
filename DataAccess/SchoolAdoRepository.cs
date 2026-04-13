@@ -43,27 +43,31 @@ namespace Skola_ER_Application.DataAccess
             WHERE s.StudentId = @StudentId
             ORDER BY subj.SubjectName, g.GradeDate;";
 
-            using var conn = CreateConnection();
-            using var cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@StudentId", studentId);
-
-            conn.Open();
-            using var reader = cmd.ExecuteReader();
-            if (!reader.HasRows) 
+            using (var conn = CreateConnection())
             {
-                Console.WriteLine("No grades found for this student.");
-                return;
-            }
 
-            while (reader.Read())
-            {
-                var date = (DateTime)reader["GradeDate"];
-                Console.WriteLine(
-                    $"{reader["StudentFirstName"]} {reader["StudentLastName"]} got a " +
-                    $"{reader["GradeValue"]}on {reader["SubjectName"]} the " + 
-                    $"({date:yyyy-MM-dd}) " +
-                    $"set by {reader["TeacherFirstName"]} {reader["TeacherLastName"]}.");
+                using var cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+                conn.Open();
+                using var reader = cmd.ExecuteReader();
+                if (!reader.HasRows)
+                {
+                    Console.WriteLine("No grades found for this student.");
+                    return;
+                }
+
+                while (reader.Read())
+                {
+                    var date = (DateTime)reader["GradeDate"];
+                    Console.WriteLine(
+                        $"{reader["StudentFirstName"]} {reader["StudentLastName"]} got a " +
+                        $"{reader["GradeValue"]}on {reader["SubjectName"]} the " +
+                        $"({date:yyyy-MM-dd}) " +
+                        $"set by {reader["TeacherFirstName"]} {reader["TeacherLastName"]}.");
+                }
             }
+            Console.WriteLine();
         }
         // - ShowTotalSalaryPerDepartment
         public void ShowTotalSalaryPerDepartment()
@@ -138,7 +142,8 @@ namespace Skola_ER_Application.DataAccess
                     $"- Class: {reader["ClassNAme"]}, PersonalNo: {reader["StudentPersonalNo"]}, Gender: {reader["Gender"]}"
                     );
             }
-            else {
+            else
+            {
                 Console.WriteLine("Student not found.");
             }
         }

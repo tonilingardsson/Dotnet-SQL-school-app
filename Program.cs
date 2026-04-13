@@ -9,8 +9,6 @@ namespace Skola_ER_Application
     {
         private static void Main(string[] args)
         {
-            using var context = new ErSkolaContext();
-
             var connectionString = "Server=.;Database=ER_Skola;Trusted_Connection=True;TrustServerCertificate=True;";
             var adoRepo = new SchoolAdoRepository(connectionString);
 
@@ -28,42 +26,70 @@ namespace Skola_ER_Application
 
                 Console.WriteLine("6. Exit");
                 Console.Write("Choice: ");
+
                 var choice = Console.ReadLine();
 
                 switch (choice)
                 {
                     case "1":
-                        StudentService.ShowAllStudents(context);
+                        using (var context = new ErSkolaContext())
+                        {
+                            StudentService.ShowAllStudents(context);
+                        }
                         break;
                     case "2":
+                        using (var context = new ErSkolaContext())
+                        {
                         StudentService.ShowStudentsInClass(context);
+                        }
                         break;
                     case "3":
+                        using (var context = new ErSkolaContext())
+                        {
                         Console.WriteLine("Student ID: ");
+
                         int.TryParse(Console.ReadLine(), out var sid);
                         adoRepo.ShowGradesForStudent(sid);
+                        }
                         break;
                     case "4":
-                        Console.WriteLine("Student ID: ");
-                        int.TryParse(Console.ReadLine(), out sid);
-                        adoRepo.ShowStudentInfoById(sid);
+                        using (var context = new ErSkolaContext())
+                        {
+                            Console.WriteLine("Student ID: ");
+                            int.TryParse(Console.ReadLine(), out var sid);
+                            adoRepo.ShowStudentInfoById(sid);
+                        }
                         break;
                     case "5":
+                        using (var context = new ErSkolaContext())
+                        { 
                         StaffService.ShowStaffWithRole(context);
+                        }
                         break;
                     case "6":
-                        StaffService.AddNewStaff(context);
+                        using (var context = new ErSkolaContext()) 
+                        { 
+                        StaffService.AddNewStaff();
+                        }
                         break;
                     case "7":
+                        using (var context = new ErSkolaContext()) 
+                        { 
                         adoRepo.ShowTotalSalaryPerDepartment();
+                        }
                         break;
                     case "8":
+                        using (var context = new ErSkolaContext()) 
+                        { 
                         adoRepo.ShowAverageSalaryPerDepartment();
+                        }
                         break;
 
                         // StaffService.ShowTeacherCountPerDepartment(context);
                         // break;
                     case "9":
+                        using (var context = new ErSkolaContext()) 
+                        { 
                         // TODO after SetGradeWithTransaction exists
                         Console.WriteLine("Student ID: ");
                         int.TryParse(Console.ReadLine(), out var sId);
@@ -81,6 +107,7 @@ namespace Skola_ER_Application
                             break;
                         }
                         adoRepo.SetGradeWithTransaction(sId, subjId, tId, grade ?? "", gDate);
+                        }
                         break;
                     case "0":
                         return;
