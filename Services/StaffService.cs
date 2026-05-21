@@ -1,6 +1,5 @@
 ﻿using Skola_ER_Application.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Channels;
 using System.Globalization;
 
 namespace Skola_ER_Application.Services;
@@ -33,19 +32,20 @@ public static class StaffService
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out var parsedDate))
-            { 
+            {
+                Console.WriteLine("Invalid date format! Please use YYYY-MM-DD or YYYYMMDD.");
+                return;
+            }
 
-        Console.WriteLine("Invalid date format! Please use YYYY-MM-DD or YYYYMMDD.");
-        return;
-    }
-    contractStartDate = parsedDate;
+            contractStartDate = parsedDate;
         }
 
         using (var context = new ErSkolaContext())
         {
+            var roles = context.Roles
+                .AsNoTracking()
+                .ToList();
 
-            // Choose role
-            var roles = context.Roles.ToList();
             Console.WriteLine("Available roles:");
             foreach (var r in roles)
                 Console.WriteLine($"{r.RoleId}: {r.RoleName}");
@@ -57,8 +57,10 @@ public static class StaffService
                 return;
             }
 
-            // Choose department
-            var departments = context.Departments.ToList();
+            var departments = context.Departments
+                .AsNoTracking()
+                .ToList();
+
             Console.WriteLine("Available departments:");
             foreach (var d in departments)
                 Console.WriteLine($"{d.DepartmentId}: {d.DepartmentName}");
@@ -83,12 +85,14 @@ public static class StaffService
             context.Staff.Add(staff);
             context.SaveChanges();
         }
+
         Console.WriteLine("Staff added!");
     }
 
     public static void ShowStaffWithRole(ErSkolaContext context)
     {
         var staffList = context.Staff
+            .AsNoTracking()
             .Include(s => s.Role)
             .ToList();
 
@@ -99,12 +103,12 @@ public static class StaffService
     public static void ShowTeacherCountPerDepartment(ErSkolaContext context)
     {
         var query = context.Staff
+            .AsNoTracking()
             .Where(s => s.Role.RoleName == "Teacher")
             .GroupBy(s => s.Department)
             .Select(g => new { Department = g.Key, TeacherCount = g.Count() })
             .ToList();
 
-        // Let's count how many teachers
         foreach (var assignation in query)
         {
             Console.WriteLine($"{assignation.Department}: {assignation.TeacherCount} teachers");

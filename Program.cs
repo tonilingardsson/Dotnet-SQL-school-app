@@ -24,7 +24,7 @@ namespace Skola_ER_Application
                 Console.WriteLine("8. Average salary per department");
                 Console.WriteLine("9. Set grade with Transaction");
 
-                Console.WriteLine("6. Exit");
+                Console.WriteLine("0. Exit");
                 Console.Write("Choice: ");
 
                 var choice = Console.ReadLine();
@@ -37,80 +37,73 @@ namespace Skola_ER_Application
                             StudentService.ShowAllStudents(context);
                         }
                         break;
+
                     case "2":
                         using (var context = new ErSkolaContext())
                         {
-                        StudentService.ShowStudentsInClass(context);
+                            StudentService.ShowStudentsInClass(context);
                         }
                         break;
-                    case "3":
-                        using (var context = new ErSkolaContext())
-                        {
-                        Console.WriteLine("Student ID: ");
 
+                    case "3":
+                        Console.Write("Student ID: ");
                         int.TryParse(Console.ReadLine(), out var sid);
                         adoRepo.ShowGradesForStudent(sid);
-                        }
                         break;
+
                     case "4":
-                        using (var context = new ErSkolaContext())
-                        {
-                            Console.WriteLine("Student ID: ");
-                            int.TryParse(Console.ReadLine(), out var sid);
-                            adoRepo.ShowStudentInfoById(sid);
-                        }
+                        Console.Write("Student ID: ");
+                        int.TryParse(Console.ReadLine(), out sid);
+                        adoRepo.ShowStudentInfoById(sid);
                         break;
+
                     case "5":
                         using (var context = new ErSkolaContext())
-                        { 
-                        StaffService.ShowStaffWithRole(context);
-                        }
-                        break;
-                    case "6":
-                        using (var context = new ErSkolaContext()) 
-                        { 
-                        StaffService.AddNewStaff();
-                        }
-                        break;
-                    case "7":
-                        using (var context = new ErSkolaContext()) 
-                        { 
-                        adoRepo.ShowTotalSalaryPerDepartment();
-                        }
-                        break;
-                    case "8":
-                        using (var context = new ErSkolaContext()) 
-                        { 
-                        adoRepo.ShowAverageSalaryPerDepartment();
+                        {
+                            StaffService.ShowStaffWithRole(context);
                         }
                         break;
 
-                        // StaffService.ShowTeacherCountPerDepartment(context);
-                        // break;
+                    case "6":
+                        StaffService.AddNewStaff();
+                        break;
+
+                    case "7":
+                        adoRepo.ShowTotalSalaryPerDepartment();
+                        break;
+
+                    case "8":
+                        adoRepo.ShowAverageSalaryPerDepartment();
+                        break;
+
                     case "9":
-                        using (var context = new ErSkolaContext()) 
-                        { 
-                        // TODO after SetGradeWithTransaction exists
-                        Console.WriteLine("Student ID: ");
+                        Console.Write("Student ID: ");
                         int.TryParse(Console.ReadLine(), out var sId);
-                        Console.WriteLine("Subject ID: ");
+
+                        Console.Write("Subject ID: ");
                         int.TryParse(Console.ReadLine(), out var subjId);
-                        Console.WriteLine("Teacher ID: ");
+
+                        Console.Write("Teacher ID: ");
                         int.TryParse(Console.ReadLine(), out var tId);
+
                         Console.Write("Grade (A-F): ");
                         var grade = Console.ReadLine();
-                        Console.WriteLine("Grade date (YYYY-MM-DD): ");
+
+                        Console.Write("Grade date (YYYY-MM-DD): ");
                         var dateText = Console.ReadLine();
+
                         if (!DateTime.TryParse(dateText, out var gDate))
                         {
                             Console.WriteLine("Invalid date.");
                             break;
                         }
+
                         adoRepo.SetGradeWithTransaction(sId, subjId, tId, grade ?? "", gDate);
-                        }
                         break;
+
                     case "0":
                         return;
+
                     default:
                         Console.WriteLine("You must type a number 0-9");
                         break;

@@ -9,10 +9,13 @@ public static class StudentService
     {
         Console.WriteLine("Sort by: 1 = First name, 2 = Last name");
         var sortField = Console.ReadLine();
+
         Console.WriteLine("Order: 1 = Ascending, 2 = Descending");
         var sortOrder = Console.ReadLine();
 
-        var query = context.Students.AsQueryable();
+        var query = context.Students
+            .AsNoTracking()
+            .AsQueryable();
 
         bool byFirst = sortField == "1";
         bool ascending = sortOrder == "1";
@@ -34,7 +37,10 @@ public static class StudentService
 
     public static void ShowStudentsInClass(ErSkolaContext context)
     {
-        var classes = context.Classes.ToList();
+        var classes = context.Classes
+            .AsNoTracking()
+            .ToList();
+
         foreach (var c in classes)
             Console.WriteLine($"{c.ClassId}: {c.ClassName}");
 
@@ -45,10 +51,13 @@ public static class StudentService
             return;
         }
 
-        var query = context.Students.Where(s => s.ClassId == classId);
+        var query = context.Students
+            .AsNoTracking()
+            .Where(s => s.ClassId == classId);
 
         Console.WriteLine("Sort by: 1 = First name, 2 = Last name");
         var sortField = Console.ReadLine();
+
         Console.WriteLine("Order: 1 = Ascending, 2 = Descending");
         var sortOrder = Console.ReadLine();
 
